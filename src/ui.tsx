@@ -1,26 +1,73 @@
-/*
- * Copyright 2021 Nazmul Idris All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-import { Text } from "ink"
+import { Box, Newline, Text } from 'ink';
 import React, { FC } from "react"
 
-const App: FC<{ name?: string }> = ({ name = "Stranger" }) => (
-  <Text>
-    Hello, <Text color="green">{name}</Text>
-  </Text>
+const App: FC<{ state?: string }> = ({ state = "Initializing" }) => (
+  <Box borderStyle="single" flexDirection="column">
+    <Box flexDirection="row">
+      {/* LEFT PANEL */}
+      <Box flexDirection="column" width="38%">
+        <Box borderStyle="single" >
+          <Text>
+            Hydra TUI 0.9.0 <Text color="green">connected to 172.16.238.20:4001</Text>
+            <Newline />
+            Connected peers:
+            <Newline />
+            - 172.16.238.30:5001
+            <Newline />
+            - 172.16.238.10:5001
+          </Text>
+        </Box>
+        <Box borderStyle="single" >
+          <Text>
+            Party <Text color="yellow">00000000000033</Text>
+            <Newline />
+            Address <Text color="yellow">addr_test1vqeuiqwjdas</Text>
+            <Newline />
+            Head participants:
+            <Newline />
+            - <Text color="yellow">00000000000033</Text>
+            <Newline />
+            - 00000000000042
+            <Newline />
+            - 0000000000002a
+          </Text>
+        </Box>
+      </Box>
+      {/* CENTER PANEL */}
+      <Box flexDirection="column" width="54%">
+        <Box borderStyle="single" height="20%">
+          <Text>Head Status: <Text color="blue">{state}</Text></Text>
+        </Box>
+        <Box borderStyle="single" height="80%">
+          <Text>
+            Total commited: 0.00000 A and -1 asset(s)
+            <Newline />
+            Waiting for parties to commit:
+            <Newline />
+            - <Text color="yellow">00000000000033</Text>
+            <Newline />
+            - 00000000000042
+            <Newline />
+            - 0000000000002a
+          </Text>
+        </Box>
+      </Box>
+      {/* RIGHT PANEL */}
+      <Box borderStyle="single" flexDirection="column" width="8%">
+        <Text>
+          [C]ommit
+          <Newline />
+          [A]bort
+          <Newline />
+          [Q]uit
+        </Text>
+      </Box>
+    </Box>
+    {/* BOTTOM PANEL */}
+    <Box borderStyle="single" flexDirection="row">
+      <Text><Text color="blue">Feedback logs</Text></Text>
+    </Box>
+  </Box>
 )
 
 export default App
