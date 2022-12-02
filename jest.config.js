@@ -15,8 +15,8 @@
  */
 
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
+  preset: "ts-jest", // Tell Jest to use `ts-jest` plugin.
+  testEnvironment: "node", // Execution environment (can't be `ts-node`).
   projects: [
     {
       displayName: "node:🟡 env project",
