@@ -5,13 +5,12 @@ import Render from "./render"
 const App: FC<{ state?: string }> = ({ state = "Initializing" }) => (
   <Box borderStyle="single" flexDirection="column" >
     <Box flexDirection="row">
-      {Render.renderLeftPanel({ state })}
-      {Render.renderCenterPanel({ state })}
-      {Render.renderRightPanel({ state })}
+      {Render.leftPanel({ state })}
+      {Render.centerPanel({ state })}
+      {Render.rightPanel({ state })}
     </Box>
-    {/* BOTTOM PANEL */}
     <Box borderStyle="single" flexDirection="row">
-      {Render.renderBottomPanel({ state })}
+      {Render.bottomPanel({ state })}
     </Box>
   </Box>
 )

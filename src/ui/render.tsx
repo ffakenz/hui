@@ -1,7 +1,7 @@
 import { Box, Newline, Text } from 'ink'
 import React, { FC } from "react"
 
-const renderLeftPanel: FC<{ state?: string }> = () => (
+const leftPanel: FC<{ state?: string }> = () => (
     <Box flexDirection="column" width="38%">
         <Box borderStyle="single" >
             <Text>
@@ -32,7 +32,7 @@ const renderLeftPanel: FC<{ state?: string }> = () => (
     </Box>
 )
 
-const renderCenterPanel: FC<{ state?: string }> = ({ state = "Initializing" }) => (
+const centerPanel: FC<{ state?: string }> = ({ state = "Initializing" }) => (
     <Box flexDirection="column" width="54%">
         <Box borderStyle="single" height="20%">
             <Text>Head Status: <Text color="blue">{state}</Text></Text>
@@ -53,7 +53,7 @@ const renderCenterPanel: FC<{ state?: string }> = ({ state = "Initializing" }) =
     </Box>
 )
 
-const renderRightPanel: FC<{ state?: string }> = () => (
+const rightPanel: FC<{ state?: string }> = () => (
     <Box borderStyle="single" flexDirection="column" width="8%">
         <Text>
             [C]ommit
@@ -65,15 +65,15 @@ const renderRightPanel: FC<{ state?: string }> = () => (
     </Box>
 )
 
-const renderBottomPanel: FC<{ state?: string }> = () => (
+const bottomPanel: FC<{ state?: string }> = () => (
     <Text><Text color="blue">Feedback logs</Text></Text>
 )
 
 const Render = {
-    renderLeftPanel,
-    renderCenterPanel,
-    renderRightPanel,
-    renderBottomPanel
+    leftPanel,
+    centerPanel,
+    rightPanel,
+    bottomPanel
 }
 
 export default Render
