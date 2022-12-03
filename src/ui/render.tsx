@@ -40,7 +40,7 @@ const centerPanel: FC<{ state?: State }> = ({ state }) => {
         return (
             <Box flexDirection="column" width="54%">
                 <Box borderStyle="single" height="20%">
-                    <Text>Head Status: <Text color="blue">{state}</Text></Text>
+                    <Text>Head Status: <Text color="blue">{(state as Connected).headState.tag}</Text></Text>
                 </Box>
                 <Box borderStyle="single" height="80%">
                     <Text>
