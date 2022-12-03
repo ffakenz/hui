@@ -1,8 +1,9 @@
 import { Box } from 'ink'
 import React, { FC } from "react"
 import Render from "./render"
+import { State } from "./state"
 
-const App: FC<{ state?: string }> = ({ state = "Initializing" }) => (
+const App: FC<{ state: State }> = ({ state }) => (
   <Box borderStyle="single" flexDirection="column" >
     <Box flexDirection="row">
       {Render.leftPanel({ state })}

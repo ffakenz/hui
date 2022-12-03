@@ -1,7 +1,8 @@
 import { Box, Newline, Text } from 'ink'
 import React, { FC } from "react"
+import { State, Connected } from "./state"
 
-const leftPanel: FC<{ state?: string }> = () => (
+const leftPanel: FC<{ state?: State }> = () => (
     <Box flexDirection="column" width="38%">
         <Box borderStyle="single" >
             <Text>
@@ -32,28 +33,42 @@ const leftPanel: FC<{ state?: string }> = () => (
     </Box>
 )
 
-const centerPanel: FC<{ state?: string }> = ({ state = "Initializing" }) => (
-    <Box flexDirection="column" width="54%">
-        <Box borderStyle="single" height="20%">
-            <Text>Head Status: <Text color="blue">{state}</Text></Text>
-        </Box>
-        <Box borderStyle="single" height="80%">
-            <Text>
-                Total commited: 0.00000 A and -1 asset(s)
-                <Newline />
-                Waiting for parties to commit:
-                <Newline />
-                - <Text color="yellow">00000000000033</Text>
-                <Newline />
-                - 00000000000042
-                <Newline />
-                - 0000000000002a
-            </Text>
-        </Box>
-    </Box>
-)
+const centerPanel: FC<{ state?: State }> = ({ state }) => {
+    if ((state as Connected).headState) {
+        return (
+            <Box flexDirection="column" width="54%">
+                <Box borderStyle="single" height="20%">
+                    <Text>Head Status: <Text color="blue">{state}</Text></Text>
+                </Box>
+                <Box borderStyle="single" height="80%">
+                    <Text>
+                        Total commited: 0.00000 A and -1 asset(s)
+                        <Newline />
+                        Waiting for parties to commit:
+                        <Newline />
+                        - <Text color="yellow">00000000000033</Text>
+                        <Newline />
+                        - 00000000000042
+                        <Newline />
+                        - 0000000000002a
+                    </Text>
+                </Box>
+            </Box>
+        )
+    } else {
+        return (
+            <Box flexDirection="column" width="54%">
+                <Box borderStyle="single" height="20%">
+                    <Text>Head Status: <Text color="red">Disconnected</Text></Text>
+                </Box>
+                <Box borderStyle="single" height="80%">
+                </Box>
+            </Box>
+        )
+    }
+}
 
-const rightPanel: FC<{ state?: string }> = () => (
+const rightPanel: FC<{ state?: State }> = () => (
     <Box borderStyle="single" flexDirection="column" width="8%">
         <Text>
             [C]ommit
@@ -65,7 +80,7 @@ const rightPanel: FC<{ state?: string }> = () => (
     </Box>
 )
 
-const bottomPanel: FC<{ state?: string }> = () => (
+const bottomPanel: FC<{ state?: State }> = () => (
     <Text><Text color="blue">Feedback logs</Text></Text>
 )
 

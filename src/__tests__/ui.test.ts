@@ -14,14 +14,13 @@ describe("my test suite", () => {
 })
 
 describe("ink test suite", () => {
-  test("greet unknown user", () => {
-    const { lastFrame } = render(React.createElement(App, null))
-    expect(lastFrame()).toContain(TextColor.builder.blue.build()("Initializing"))
-  })
+  test("render disconnected state", () => {
+    const nodeHost = { hostname: "hostname", port: 8080 }
+    const now = { time: Date.now() }
+    const state = { nodeHost, now }
 
-  test("greet user with a name", () => {
-    const instance = render(React.createElement(App, { state: "Initializing" }))
+    const instance = render(React.createElement(App, { state }))
     const { lastFrame } = instance
-    expect(lastFrame()).toContain(TextColor.builder.blue.build()("Initializing"))
+    expect(lastFrame()).toContain(TextColor.builder.red.build()("Disconnected"))
   })
 })

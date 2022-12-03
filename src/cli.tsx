@@ -6,11 +6,15 @@ import App from "./ui/ui"
 import { _let } from "r3bl-ts-utils"
 import { Command } from "commander"
 
-const name: string = _let(new Command(), (command) => {
-  command.option("-n, --name <name>", "name to display")
+const hostname: string = _let(new Command(), (command) => {
+  command.option("-h, --hostname <hostname>", "hostname to display")
   command.parse(process.argv)
   const options = command.opts()
-  return options["name"] as string
+  return options["hostname"] as string
 })
 
-render(<App state={name} />)
+const nodeHost = { hostname, port: 8080 }
+const now = { time: Date.now() }
+const disconnected = { nodeHost, now }
+
+render(<App state={disconnected} />)

@@ -1,38 +1,38 @@
-interface Host { hostname: string; port: number }
+export interface Host { hostname: string; port: number }
 
-interface Party { vkey: string }
+export interface Party { vkey: string }
 
-interface NodeId { nodeId: string }
+export interface NodeId { nodeId: string }
 
-interface UTCTime { time: Date }
+export interface UTCTime { time: number }
 
-interface UTxO {
+export interface UTxO {
     toMap: object // FIXME ~> Map TxIn out
 }
 
-type DialogState = "NoDialog" | "Dialog"
+export type DialogState = "NoDialog" | "Dialog"
 
-type Pending = "Pending" | "NotPending"
+export type Pending = "Pending" | "NotPending"
 
-type FeedbackState = "Short" | "Full"
+export type FeedbackState = "Short" | "Full"
 
-type Severity = "Success" | "Info" | "Error"
+export type Severity = "Success" | "Info" | "Error"
 
-interface UserFeedback {
+export interface UserFeedback {
     severity: Severity;
     message: string;
     time: UTCTime
 }
 
-interface Initializing { parties: [Party]; remainingParties: [Party]; utxo: UTxO }
+export interface Initializing { parties: [Party]; remainingParties: [Party]; utxo: UTxO }
 
-interface Open { parties: [Party]; utxo: UTxO }
+export interface Open { parties: [Party]; utxo: UTxO }
 
-interface Closed { contestationDeadline: UTCTime }
+export interface Closed { contestationDeadline: UTCTime }
 
-interface Final { utxo: UTxO }
+export interface Final { utxo: UTxO }
 
-type HeadState =
+export type HeadState =
     "Idle"
     | Initializing
     | Open
@@ -40,9 +40,9 @@ type HeadState =
     | "FanoutPossible"
     | Final
 
-interface Disconnected { nodeHost: Host; now: UTCTime }
+export interface Disconnected { nodeHost: Host; now: UTCTime }
 
-interface Connected {
+export interface Connected {
     me?: Party;
     nodeHost: Host;
     index: [NodeId];
@@ -54,4 +54,4 @@ interface Connected {
     pending: Pending;
 }
 
-type State = Disconnected | Connected
+export type State = Disconnected | Connected
