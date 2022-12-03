@@ -2,11 +2,13 @@ import { Box, Newline, Text } from 'ink'
 import React, { FC } from "react"
 import { State, Connected } from "./state"
 
-const leftPanel: FC<{ state?: State }> = () => (
+const leftPanel: FC<{ state?: State }> = ({ state }) => (
     <Box flexDirection="column" width="38%">
         <Box borderStyle="single" >
             <Text>
-                Hydra TUI 0.9.0 <Text color="green">connected to 172.16.238.20:4001</Text>
+                Hydra TUI 0.9.0 <Text color="green">
+                    connected to {state?.nodeHost.hostname}:{state?.nodeHost.port}
+                </Text>
                 <Newline />
                 Connected peers:
                 <Newline />
