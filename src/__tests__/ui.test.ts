@@ -1,7 +1,7 @@
 import { render } from "ink-testing-library"
 import { TextColor } from "r3bl-ts-utils"
 import React from "react"
-import App from "../ui"
+import App from "../ui/ui"
 
 describe("my test suite", () => {
   test("a spec with an expectation", () => {

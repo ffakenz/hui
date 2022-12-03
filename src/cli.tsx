@@ -2,7 +2,7 @@
 
 import React from "react"
 import { render } from "ink"
-import App from "./ui"
+import App from "./ui/ui"
 import { _let } from "r3bl-ts-utils"
 import { Command } from "commander"
 
