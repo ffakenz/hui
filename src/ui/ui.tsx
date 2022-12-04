@@ -1,6 +1,5 @@
-import { Box } from 'ink'
-import React, { FC, useEffect, useState, useCallback, useRef } from "react"
-import Render from "./render"
+import { FC, useEffect, useState, useCallback, useRef } from "react"
+import Render from "./render/main"
 import { Options } from "./options"
 import { HydraEvent, HydraEventType } from './ws/hydra-events'
 import WebSocket from 'ws'
@@ -42,18 +41,7 @@ const App: FC<{ options: Options }> = ({ options }) => {
     event && callback(event)
   }, [event])
 
-  return (
-    <Box borderStyle="single" flexDirection="column" >
-      <Box flexDirection="row">
-        {Render.leftPanel({ state })}
-        {Render.centerPanel({ state })}
-        {Render.rightPanel({ state })}
-      </Box>
-      <Box borderStyle="single" flexDirection="row">
-        {Render.bottomPanel({ state })}
-      </Box>
-    </Box>
-  )
+  return Render({ state })
 }
 
 export default App
