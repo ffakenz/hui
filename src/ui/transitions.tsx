@@ -7,7 +7,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
         // console.log("[handleAppEvent]=,", state)
         switch (output.tag) {
             case "Greetings": {
-                const greetings = (output as Greetings)
+                const greetings = output as Greetings
                 return {
                     ...state,
                     me: greetings.me,
@@ -15,7 +15,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                 }
             }
             case "PeerConnected": {
-                const peerConnected = (output as PeerConnected)
+                const peerConnected = output as PeerConnected
                 const peer = peerConnected.peer
                 const connected = state as Connected
                 const peers = connected.peers
@@ -26,7 +26,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                 }
             }
             case "PeerDisconnected": {
-                const peerDisconnected = (output as PeerDisconnected)
+                const peerDisconnected = output as PeerDisconnected
                 const peer = peerDisconnected.peer
                 const connected = state as Connected
                 const peers = connected.peers
@@ -36,7 +36,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                 }
             }
             case "ReadyToCommit": {
-                const readyToCommit = (output as ReadyToCommit)
+                const readyToCommit = output as ReadyToCommit
                 const ps = readyToCommit.parties
                 const initializing: HeadState = {
                     tag: HeadStateType.Initializing,
@@ -85,8 +85,8 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                 const balance: (utxo: UTxO) => number = utxo => {
                     const lovelaces = Object.keys(utxo).map((key: string) => {
                         type ObjectKey = keyof typeof utxo;
-                        const utxoType = utxo[(key as ObjectKey)]
-                        return (utxoType["value"]["lovelace"] as number)
+                        const utxoType = utxo[key as ObjectKey]
+                        return utxoType["value"]["lovelace"] as number
                     });
                     const total = lovelaces.reduce((acc, lovelace) => acc + lovelace)
                     return total
@@ -94,9 +94,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
 
                 const feedback = {
                     severity: Severity.Info,
-                    message: `
-                        ${party.toString()} committed ${balance(utxo)} lovelace
-                    `,
+                    message: `${party.toString()} committed ${balance(utxo)} lovelace`,
                     time: {
                         time: Date.now()
                     }
