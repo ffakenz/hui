@@ -1,5 +1,5 @@
-import { Idle, State, Host, UTCTime, DialogState, FeedbackState, Pending, Connected, HeadStateType } from "./model/types"
-import { Greetings, PeerConnected, PeerDisconnected, ServerOutput } from './ws/hydra-events'
+import { Idle, State, Host, UTCTime, DialogState, FeedbackState, Pending, Connected, HeadStateType, HeadState, Initializing, Severity, UserFeedback } from "./model/types"
+import { Greetings, PeerConnected, PeerDisconnected, ReadyToCommit, ServerOutput } from './ws/hydra-events'
 import { Options } from "./options"
 
 const handleAppEvent: (state: State, output: ServerOutput) => State =
@@ -30,10 +30,30 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                     peers: peers.filter(p => p.nodeId != peer.nodeId)
                 }
             }
-            case "ReadyToCommit":
+            case "ReadyToCommit": {
+                const ps = (output as ReadyToCommit).parties
+                const initializing: HeadState = {
+                    tag: HeadStateType.Initializing,
+                    parties: ps,
+                    remainingParties: ps,
+                    utxo: {
+                        toMap: {}
+                    }
+                } as Initializing
+                const feedback = {
+                    severity: Severity.Info,
+                    message: "Head initialized, ready for commit(s).",
+                    time: {
+                        time: Date.now()
+                    }
+                } as UserFeedback
                 return {
-                    ...state
+                    ...state,
+                    headState: initializing,
+                    pending: Pending.NotPending,
+                    feedback: [feedback].concat((state as Connected).feedback)
                 }
+            }
             case "Committed":
                 return { ...state }
             case "HeadIsAborted":
