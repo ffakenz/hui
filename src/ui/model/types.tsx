@@ -6,9 +6,20 @@ export interface NodeId { nodeId: string }
 
 export interface UTCTime { time: number }
 
-export interface UTxO {
-    toMap: object // FIXME ~> Map TxIn out
+export interface UTxOValueType {
+    lovelace: number
 }
+
+export interface UTxOType {
+    address: string,
+    datum?: string,
+    datumhash?: string,
+    inlineDatum?: string,
+    referenceScript?: string,
+    value: UTxOValueType
+}
+
+export type UTxO = object // Map String UTxOType
 
 export enum DialogState {
     NoDialog,
