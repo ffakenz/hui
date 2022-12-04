@@ -1,4 +1,4 @@
-import { Idle, State, Host, UTCTime, DialogState, FeedbackState, Pending, Connected } from "./model/types"
+import { Idle, State, Host, UTCTime, DialogState, FeedbackState, Pending, Connected, HeadStateType } from "./model/types"
 import { Greetings, PeerConnected, PeerDisconnected, ServerOutput } from './ws/hydra-events'
 import { Options } from "./options"
 
@@ -31,7 +31,9 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                 }
             }
             case "ReadyToCommit":
-                return { ...state }
+                return {
+                    ...state
+                }
             case "Committed":
                 return { ...state }
             case "HeadIsAborted":
@@ -61,7 +63,7 @@ const connected: (options: Options) => State = (options) => {
             port: options.hydraNodeHost.port
         } as Host,
         peers: [],
-        headState: { tag: "Idle" } as Idle,
+        headState: { tag: HeadStateType.Idle } as Idle,
         dialogState: DialogState.NoDialog,
         feedbackState: FeedbackState.Short,
         feedback: [],

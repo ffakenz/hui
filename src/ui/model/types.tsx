@@ -37,17 +37,21 @@ export interface UserFeedback {
     time: UTCTime
 }
 
-export interface Idle { tag: "Idle" }
+export enum HeadStateType {
+    Idle = "Idle",
+    Initializing = "Initializing",
+    Open = "Open",
+    Closed = "Closed",
+    FanoutPossible = "FanoutPossible",
+    Final = "Final"
+}
 
-export interface Initializing { tag: "Initializing", parties: Party[], remainingParties: Party[], utxo: UTxO }
-
-export interface Open { tag: "Open", parties: Party[], utxo: UTxO }
-
-export interface Closed { tag: "Closed", contestationDeadline: UTCTime }
-
-export interface FanoutPossible { tag: "FanoutPossible" }
-
-export interface Final { tag: "Final", utxo: UTxO }
+export interface Idle { tag: HeadStateType.Idle }
+export interface Initializing { tag: HeadStateType.Initializing, parties: Party[], remainingParties: Party[], utxo: UTxO }
+export interface Open { tag: HeadStateType.Open, parties: Party[], utxo: UTxO }
+export interface Closed { tag: HeadStateType.Closed, contestationDeadline: UTCTime }
+export interface FanoutPossible { tag: HeadStateType.FanoutPossible }
+export interface Final { tag: HeadStateType.Final, utxo: UTxO }
 
 export type HeadState =
     Idle
