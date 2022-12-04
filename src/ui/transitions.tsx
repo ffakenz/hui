@@ -4,7 +4,7 @@ import { Options } from "./options"
 
 const handleAppEvent: (state: State, output: ServerOutput) => State =
     (state: State, output: ServerOutput) => {
-        console.log("[handleAppEvent]=,", state)
+        // console.log("[handleAppEvent]=,", state)
         switch (output.tag) {
             case "Greetings": {
                 const greetings = (output as Greetings)
@@ -131,8 +131,25 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                     pending: Pending.NotPending
                 }
             }
-            case "RolledBack":
-                return { ...state }
+            case "RolledBack": {
+                // XXX: This is a bit of a mess as we do NOT know in which state the Hydra
+                // head is.Even worse, we have no way to find out!
+                const feedback = {
+                    severity: Severity.Info,
+                    message: "Chain rolled back! You might need to re-submit Head transactions manually now.",
+                    time: {
+                        time: Date.now()
+                    }
+                } as UserFeedback
+
+                const connected = state as Connected
+
+                return {
+                    ...state,
+                    feedback: [feedback].concat(connected.feedback),
+                    pending: Pending.NotPending
+                }
+            }
             default:
                 return { ...state }
         }
