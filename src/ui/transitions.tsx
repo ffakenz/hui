@@ -17,7 +17,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
             case "PeerConnected": {
                 const peerConnected = (output as PeerConnected)
                 const peer = peerConnected.peer
-                const connected = (state as Connected)
+                const connected = state as Connected
                 const peers = connected.peers
                 const set = new Set(peers.concat([peer]))
                 return {
@@ -28,7 +28,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
             case "PeerDisconnected": {
                 const peerDisconnected = (output as PeerDisconnected)
                 const peer = peerDisconnected.peer
-                const connected = (state as Connected)
+                const connected = state as Connected
                 const peers = connected.peers
                 return {
                     ...state,
@@ -51,7 +51,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                         time: Date.now()
                     }
                 } as UserFeedback
-                const connected = (state as Connected)
+                const connected = state as Connected
                 return {
                     ...state,
                     headState: initializing,
@@ -80,7 +80,7 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                     }
                 const party = commited.party
                 const utxo = commited.utxo
-                const connected = (state as Connected)
+                const connected = state as Connected
 
                 const balance: (utxo: UTxO) => number = utxo => {
                     const lovelaces = Object.keys(utxo).map((key: string) => {
@@ -113,8 +113,24 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                     pending: pending
                 }
             }
-            case "HeadIsAborted":
-                return { ...state }
+            case "HeadIsAborted": {
+                const feedback = {
+                    severity: Severity.Info,
+                    message: "Head aborted, back to square one.",
+                    time: {
+                        time: Date.now()
+                    }
+                } as UserFeedback
+
+                const connected = state as Connected
+
+                return {
+                    ...state,
+                    headState: { tag: HeadStateType.Idle } as Idle,
+                    feedback: [feedback].concat(connected.feedback),
+                    pending: Pending.NotPending
+                }
+            }
             case "RolledBack":
                 return { ...state }
             default:
