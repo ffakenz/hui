@@ -1,96 +1,46 @@
 import { Box } from 'ink'
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState, useCallback, useRef } from "react"
 import Render from "./render"
 import { Options } from "./options"
-import { Idle, State, Host, UTCTime, DialogState, FeedbackState, Pending, Connected } from "./state"
-import { Greetings, PeerConnected, PeerDisconnected, ServerOutput } from './hydra-events'
+import { HydraEvent, HydraEventType } from './ws/hydra-events'
 import WebSocket from 'ws'
+import { transitions } from './transitions'
+import { wsEvents } from './ws/ws-events'
 
-const disconnected: (options: Options) => State = (options) => {
-  return {
-    nodeHost: {
-      hostname: options.hydraNodeHost.hostname,
-      port: options.hydraNodeHost.port
-    } as Host,
-    now: { time: Date.now() } as UTCTime
-  }
-}
+const App: FC<{ options: Options }> = ({ options }) => {
+  const [state, setState] = useState(transitions.disconnected(options))
 
-const connected: (options: Options) => State = (options) => {
-  return {
-    me: null,
-    nodeHost: {
-      hostname: options.hydraNodeHost.hostname,
-      port: options.hydraNodeHost.port
-    } as Host,
-    peers: [],
-    headState: { tag: "Idle" } as Idle,
-    dialogState: DialogState.NoDialog,
-    feedbackState: FeedbackState.Short,
-    feedback: [],
-    now: { time: Date.now() } as UTCTime,
-    pending: Pending.Pending
-  }
-}
+  const [event, setEvent] = useState<HydraEvent | null>(null)
+  const ws = useRef<WebSocket | null>(null)
 
-const App: FC<{ options: Options, ws: WebSocket }> = ({ options, ws }) => {
+  useEffect(() => {
+    ws.current = new WebSocket(`ws://${options.hydraNodeHost.hostname}:${options.hydraNodeHost.port}`)
+    wsEvents(ws.current, setEvent)
+    const wsCurrent = ws.current
+    return () => {
+      wsCurrent.close()
+    }
+  }, [])
 
-  const [state, setState] = useState(disconnected(options))
-
-  ws.on('open', function open() {
-    console.log('connected')
-    setState(connected(options))
-  })
-
-  ws.on('close', function close() {
-    console.log('disconnected')
-    setState(disconnected(options))
-  })
-
-  ws.on("message", (e: Buffer) => {
-    const data = e.toString('utf8')
-    console.log("[ServerOutput]", data)
-    const output = JSON.parse(data) as ServerOutput
-    switch (output.tag) {
-      case "Greetings": {
-        setState({
-          ...state,
-          me: (output as Greetings).me,
-          peers: []
-        })
+  const callback = useCallback((event: HydraEvent) => {
+    switch (event.tag) {
+      case HydraEventType.ClientConnected:
+        setState(transitions.connected(options))
         break
-      }
-      case "PeerConnected": {
-        const peers = (state as Connected).peers
-        const peer = (output as PeerConnected).peer
-        const set = new Set(peers.concat([peer]))
-        setState({
-          ...state,
-          peers: Array.from(set.values())
-        })
+      case HydraEventType.ClientDisconnected:
+        setState(transitions.disconnected(options))
         break
-      }
-      case "PeerDisconnected": {
-        const peers = (state as Connected).peers
-        const peer = (output as PeerDisconnected).peer
-        setState({
-          ...state,
-          peers: peers.filter(p => p.nodeId != peer.nodeId)
-        })
-        break
-      }
-      case "ReadyToCommit":
-        break
-      case "Committed":
-        break
-      case "HeadIsAborted":
-        break
-      case "RolledBack":
+      case HydraEventType.Update:
+        setState(transitions.handleAppEvent(state, event.output))
         break
       default:
-        console.log("[ServerOutput] Irrelevant message", data)
+        break
     }
-  })
+  }, [state])
+
+  useEffect(() => {
+    event && callback(event)
+  }, [event])
 
   return (
     <Box borderStyle="single" flexDirection="column" >

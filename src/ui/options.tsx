@@ -1,15 +1,15 @@
 import { _let } from "r3bl-ts-utils"
 import { Command } from "commander"
-import { Host } from "./state";
+import { Host } from "./model/types"
 
 export type FilePath = string
 export type NetworkId = number
 
 export interface Options {
-    hydraNodeHost: Host;
-    cardanoNodeSocket: FilePath;
-    cardanoNetworkId: NetworkId;
-    cardanoSigningKey: FilePath;
+    hydraNodeHost: Host
+    cardanoNodeSocket: FilePath
+    cardanoNetworkId: NetworkId
+    cardanoSigningKey: FilePath
 }
 
 const hydraNodeHost: Host = _let(new Command(), (command) => {

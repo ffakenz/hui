@@ -3,7 +3,6 @@ import { TextColor } from "r3bl-ts-utils"
 import React from "react"
 import App from "../ui/ui"
 import { options } from "../ui/options"
-import WebSocket from 'ws'
 
 describe("my test suite", () => {
   test("a spec with an expectation", () => {
@@ -17,8 +16,7 @@ describe("my test suite", () => {
 
 describe("ink test suite", () => {
   test("render disconnected state", () => {
-    const ws = new WebSocket(`ws://${options.hydraNodeHost.hostname}:${options.hydraNodeHost.port}`)
-    const instance = render(React.createElement(App, { options, ws }))
+    const instance = render(React.createElement(App, { options }))
     const { lastFrame } = instance
     expect(lastFrame()).toContain(TextColor.builder.red.build()("Disconnected"))
   })

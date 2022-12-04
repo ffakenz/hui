@@ -1,6 +1,6 @@
 import { Box, Newline, Text } from 'ink'
 import React, { FC } from "react"
-import { State, Connected } from "./state"
+import { State, Connected } from "./model/types"
 
 const leftPanel: FC<{ state?: State }> = ({ state }) => (
     <Box flexDirection="column" width="38%">

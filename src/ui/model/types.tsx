@@ -1,4 +1,4 @@
-export interface Host { hostname: string; port: number }
+export interface Host { hostname: string, port: number }
 
 export interface Party { vkey: string }
 
@@ -32,16 +32,16 @@ export enum Severity {
 }
 
 export interface UserFeedback {
-    severity: Severity;
-    message: string;
+    severity: Severity
+    message: string
     time: UTCTime
 }
 
 export interface Idle { tag: "Idle" }
 
-export interface Initializing { tag: "Initializing", parties: Party[]; remainingParties: Party[]; utxo: UTxO }
+export interface Initializing { tag: "Initializing", parties: Party[], remainingParties: Party[], utxo: UTxO }
 
-export interface Open { tag: "Open", parties: Party[]; utxo: UTxO }
+export interface Open { tag: "Open", parties: Party[], utxo: UTxO }
 
 export interface Closed { tag: "Closed", contestationDeadline: UTCTime }
 
@@ -57,18 +57,18 @@ export type HeadState =
     | FanoutPossible
     | Final
 
-export interface Disconnected { nodeHost: Host; now: UTCTime }
+export interface Disconnected { nodeHost: Host, now: UTCTime }
 
 export interface Connected {
-    me?: Party;
-    nodeHost: Host;
-    peers: NodeId[];
-    headState: HeadState;
-    dialogState: DialogState;
-    feedbackState: FeedbackState;
-    feedback: UserFeedback[];
-    now: UTCTime;
-    pending: Pending;
+    me?: Party
+    nodeHost: Host
+    peers: NodeId[]
+    headState: HeadState
+    dialogState: DialogState
+    feedbackState: FeedbackState
+    feedback: UserFeedback[]
+    now: UTCTime
+    pending: Pending
 }
 
 export type State = Disconnected | Connected
