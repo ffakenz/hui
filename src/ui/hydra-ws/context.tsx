@@ -7,4 +7,4 @@ export interface HydraSocketService {
 }
 
 export const HydraSocketContext: React.Context<HydraSocketService> =
-    React.createContext({} as HydraSocketService);
+    React.createContext({} as HydraSocketService)

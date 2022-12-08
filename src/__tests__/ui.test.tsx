@@ -1,4 +1,5 @@
 import { render } from "ink-testing-library"
+// import WS from "jest-websocket-mock"
 import { TextColor } from "r3bl-ts-utils"
 import React from "react"
 import App from "../ui/app"
@@ -21,7 +22,7 @@ describe("ink test suite", () => {
       <HydraSocketProvider>
         <App options={options} />
       </HydraSocketProvider>
-    );
+    )
     const { lastFrame } = instance
     expect(lastFrame()).toContain(TextColor.builder.red.build()("Disconnected"))
   })

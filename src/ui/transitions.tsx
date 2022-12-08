@@ -84,13 +84,13 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
 
                 const balance: (utxo: UTxO) => number = utxo => {
                     if (Object.keys(utxo).length === 0) {
-                        return 0;
+                        return 0
                     }
                     const lovelaces = Object.keys(utxo).map((key: string) => {
-                        type ObjectKey = keyof typeof utxo;
+                        type ObjectKey = keyof typeof utxo
                         const utxoType = utxo[key as ObjectKey]
                         return utxoType["value"]["lovelace"] as number
-                    });
+                    })
                     const total = lovelaces.reduce((acc, lovelace) => acc + lovelace)
                     return total
                 }
