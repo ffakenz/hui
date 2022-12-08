@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import WebSocket from 'ws'
-import { ClientConnected, ClientDisconnected, HydraEvent, HydraEventType, ServerOutput, Update } from './events'
+import { ClientConnected, ClientDisconnected, HydraEvent, HydraEventType, ServerOutput, Update } from '../events'
 import { Observable } from 'rxjs'
 import * as Rx from 'rxjs'
 import { map } from 'rxjs/operators'
