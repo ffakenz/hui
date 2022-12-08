@@ -7,39 +7,33 @@ export const onHydraEvent = (emitEvent: (evt: HydraEvent) => void) => {
     const { socket } = useContext(HydraSocketContext)
     const [event, setEvent] = useState<HydraEvent | null>(null)
 
-    // when the provider mounts, initialize it and register a few listeners
+    // when the component, *which uses this hook* mounts, add listeners.
     useEffect(() => {
         socket.on('open', () => {
-            // console.log('connected')
+            // console.log('[HydraEvent] connected')
             setEvent({ tag: HydraEventType.ClientConnected } as ClientConnected)
         })
 
         socket.on('close', () => {
-            // console.log('disconnected')
+            // console.log('[HydraEvent] disconnected')
             setEvent({ tag: HydraEventType.ClientDisconnected } as ClientDisconnected)
         })
 
-        // Remove all the listeners and close the socket when it unmounts
+        socket.on("message", (e: Buffer) => {
+            const data = e.toString('utf8')
+            // console.log("[HydraEvent][ServerOutput]", data)
+            const output = JSON.parse(data) as ServerOutput
+            setEvent({ tag: HydraEventType.Update, output } as Update)
+        })
+
+        // remove all the listeners and close the socket when it unmounts
         return () => {
             if (socket) {
-                socket.removeAllListeners()
                 socket.close()
             }
         }
     }, [])
 
-    // when the component, *which uses this hook* mounts, add a listener.
-    useEffect(() => {
-        socket.on("message", (e: Buffer) => {
-            const data = e.toString('utf8')
-            // console.log("[ServerOutput]", data)
-            const output = JSON.parse(data) as ServerOutput
-            setEvent({ tag: HydraEventType.Update, output } as Update)
-        })
-    }, [])
-
-
-    // setup effect to execute callback on every `event` change
     useEffect(() => {
         event && emitEvent(event)
     }, [event])
