@@ -50,7 +50,6 @@
     "nodemon": "latest",
     "npm-run-all": "latest",
     "prettier": "latest",
-    "rxjs": "^7.6.0",
     "ts-jest": "latest",
     "ts-node-dev": "latest",
     "tsm": "latest",
