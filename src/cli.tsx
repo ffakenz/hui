@@ -2,8 +2,13 @@
 
 import React from "react"
 import { render } from "ink"
-import App from "./ui/ui"
+import App from "./ui/app"
 import { options } from "./ui/options"
+import HydraSocketProvider from "./ui/hydra-ws/provider"
 
-
-render(<App options={options} />)
+render(
+    <HydraSocketProvider>
+        {/* the actual app */}
+        <App options={options} />
+    </HydraSocketProvider>
+)

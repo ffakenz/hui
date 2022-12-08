@@ -1,26 +1,19 @@
-import { FC, useEffect, useState, useCallback, useRef } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import Render from "./render/main"
 import { Options } from "./options"
-import { HydraEvent, HydraEventType } from './ws/hydra-events'
-import WebSocket from 'ws'
+import { HydraEvent, HydraEventType } from './hydra-ws/events'
 import { transitions } from './transitions'
-import { wsEvents } from './ws/ws-events'
+import { onHydraEvent } from "./hydra-ws/hook"
 
 const App: FC<{ options: Options }> = ({ options }) => {
   const [state, setState] = useState(transitions.disconnected(options))
-
   const [event, setEvent] = useState<HydraEvent | null>(null)
-  const ws = useRef<WebSocket | null>(null)
 
-  useEffect(() => {
-    ws.current = new WebSocket(`ws://${options.hydraNodeHost.hostname}:${options.hydraNodeHost.port}`)
-    wsEvents(ws.current, setEvent)
-    const wsCurrent = ws.current
-    return () => {
-      wsCurrent.close()
-    }
-  }, [])
+  // set up hydra-ws to `setEvent` on every `emitEvent`
+  onHydraEvent(setEvent)
 
+  // callback to be executed on every `event` change
+  // the callback may transition the state by calling `setState`
   const callback = useCallback((event: HydraEvent) => {
     switch (event.tag) {
       case HydraEventType.ClientConnected:
@@ -35,8 +28,9 @@ const App: FC<{ options: Options }> = ({ options }) => {
       default:
         break
     }
-  }, [state])
+  }, [state]) // the callback changes on every `state` transition
 
+  // setup effect to execute callback on every `event` change
   useEffect(() => {
     event && callback(event)
   }, [event])

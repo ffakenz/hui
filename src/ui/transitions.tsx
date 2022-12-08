@@ -1,5 +1,5 @@
 import { Idle, State, Host, UTCTime, DialogState, FeedbackState, Pending, Connected, HeadStateType, HeadState, Initializing, Severity, UserFeedback, UTxO, Party } from "./model/types"
-import { Committed, Greetings, PeerConnected, PeerDisconnected, ReadyToCommit, ServerOutput } from './ws/hydra-events'
+import { Committed, Greetings, PeerConnected, PeerDisconnected, ReadyToCommit, ServerOutput } from './hydra-ws/events'
 import { Options } from "./options"
 
 const handleAppEvent: (state: State, output: ServerOutput) => State =
@@ -83,6 +83,9 @@ const handleAppEvent: (state: State, output: ServerOutput) => State =
                 const connected = state as Connected
 
                 const balance: (utxo: UTxO) => number = utxo => {
+                    if (Object.keys(utxo).length === 0) {
+                        return 0;
+                    }
                     const lovelaces = Object.keys(utxo).map((key: string) => {
                         type ObjectKey = keyof typeof utxo;
                         const utxoType = utxo[key as ObjectKey]
